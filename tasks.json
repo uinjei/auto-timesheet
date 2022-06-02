@@ -1,0 +1,8 @@
+{   
+    "shiftStart": "9:00 AM",
+    "shiftEnd": "6:00 PM",
+    "description" : [
+        {"project": "C1D1", "name": "On Standby",       "estimatedTime": 2, "actualTime": 2},
+        {"project": "C1D1", "name": "Udemy Training",   "estimatedTime": 6, "actualTime": 6}
+    ]
+}

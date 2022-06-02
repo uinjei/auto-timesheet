@@ -1,0 +1,29 @@
+{
+  "name": "auto-timesheet",
+  "version": "0.1.0",
+  "description": "Create and send automated timesheet",
+  "main": "main.js",
+  "author": "Edwin Jay Javier",
+  "license": "MIT",
+  "devDependencies": {
+    "rollup": "^2.74.1"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "start": "node dist/bundle.js"
+  },
+  "bin": "dist/bundle.js",
+  "pkg": {
+    "targets": [
+      "node16-win-x64"
+    ]
+  },
+  "dependencies": {
+    "clui": "^0.3.6",
+    "googleapis": "39",
+    "moment": "^2.29.3",
+    "nconf": "^0.12.0",
+    "nodemailer": "^6.7.5",
+    "open": "^8.4.0"
+  }
+}
