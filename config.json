@@ -1,7 +1,9 @@
 {
   "createNewSpreadSheet": false,
   "sendEmail": false,
+  "setReminder": true,
+  "realtime": true,
   "yourName": "EDWIN JAY JAVIER",
   "yourEmail": "ejavier@yondu.com",
-  "recipients": "jbaltazar@yondu.com,tfrias@yondu.com,jenrique@yondu.com"
+  "recipients": "tfrias@yondu.com,jbaltazar@yondu.com,jenrique@yondu.com"
 }

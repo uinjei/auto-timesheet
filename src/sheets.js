@@ -1,7 +1,8 @@
 import { google } from "googleapis";
 import { readFile } from "fs/promises";
+import moment from "moment";
 
-import { timeToFraction, Spinner, ANIMATION, YOUR_NAME, MMDDYYYY, readJSONFile, updateSession } from "./util";
+import { timeToFraction, Spinner, ANIMATION, YOUR_NAME, MMDDYYYY, readJSONFile, updateSession, REALTIME, updateshiftEnd } from "./util";
 import createPermission from "./drive";
 import sendMail from "./gmail";
 import template from "./template";
@@ -116,7 +117,11 @@ export const endShift = async (auth, callback) => {
     const tasks = await readFile("tasks.json", { encoding: "utf8" })
         .then(tasks => JSON.parse(tasks))
         .catch(err => console.log("unable to load tasks.json: ", err.message));
-
+    
+    let time;
+    if (REALTIME) time = moment().format("h:mm A");
+    else time = tasks.shiftEnd;
+    await updateshiftEnd(time);
 
     const request = {
         spreadsheetId,
@@ -143,7 +148,7 @@ export const endShift = async (auth, callback) => {
                                 {
                                     values: {
                                         userEnteredValue: {
-                                            numberValue: timeToFraction(tasks.shiftEnd)
+                                            numberValue: timeToFraction(time)
                                         }
                                     }
                                 }
@@ -203,7 +208,7 @@ export const endShift = async (auth, callback) => {
                 process.exit();
             }
             status.stop();
-            console.log(' ✔ Populating sheet: ', response.statusText);
+            console.log('  ✔ Populating sheet: ', response.statusText);
             callback(auth, `https://docs.google.com/spreadsheets/d/${spreadsheetId}/edit#gid=${sheetId}`, true);
     });
 }

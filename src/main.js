@@ -11,7 +11,9 @@ import { addSheet, createSpreadSheet, updateCells, endShift } from "./sheets";
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets',
                 'https://www.googleapis.com/auth/gmail.compose',
                 'https://www.googleapis.com/auth/gmail.send',
-                'https://www.googleapis.com/auth/drive.file'];
+                'https://www.googleapis.com/auth/drive.file',
+                'https://www.googleapis.com/auth/calendar',
+              ];
 const TOKEN_PATH = 'token.json';
 
 const authorize = (credentials, callback, args) => {

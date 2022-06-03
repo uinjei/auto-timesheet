@@ -2,7 +2,9 @@ import { google } from "googleapis";
 import MailComposer from "nodemailer/lib/mail-composer";
 import { readFile } from "fs/promises";
 
-import { MMDDYYYY, SEND_EMAIL, YOUR_NAME, YOUR_EMAIL, RECIPIENTS, Spinner, ANIMATION, readJSONFile, updateSession } from "./util";
+import createReminder from "./calendar";
+import { MMDDYYYY, SEND_EMAIL, SET_REMINDER, YOUR_NAME, YOUR_EMAIL, RECIPIENTS,
+  Spinner, ANIMATION, readJSONFile, updateSession } from "./util";
 
 const getGmailService = (auth) => {
   const gmail = google.gmail({ version: 'v1', auth });
@@ -54,9 +56,10 @@ const sendEmail = async (gmail, link, isReply) => {
   }
   status.stop();
   console.log("  ✔ Sending mail: OK. message id: ", id);
+  if (SET_REMINDER) createReminder(auth, isReply);
 }
 
-const createDraft = async (gmail, link, isReply) => {
+const createDraft = async (auth, gmail, link, isReply) => {
   console.log("Auto send email is set to false.");
   const status = new Spinner("Creating draft message...", ANIMATION);
   status.start();
@@ -80,6 +83,7 @@ const createDraft = async (gmail, link, isReply) => {
   }
   status.stop();
   console.log("  ✔ Creating draft message: OK. message id: ", id);
+  if (SET_REMINDER) createReminder(auth, isReply);
 }
 
 const compose = async (link, isReply) => {
@@ -110,5 +114,5 @@ const compose = async (link, isReply) => {
 export default (auth, link, isReply) => {
   const gmail = getGmailService(auth);
   if (SEND_EMAIL) return sendEmail(gmail, link, isReply);
-  else return createDraft(gmail, link, isReply);
+  else return createDraft(auth, gmail, link, isReply);
 };

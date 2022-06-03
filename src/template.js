@@ -1,7 +1,7 @@
 import {readFile} from "fs/promises";
 import moment from "moment";
 
-import { timeToFraction } from "./util";
+import { timeToFraction, REALTIME, updateshiftStart } from "./util";
 
 const past =  moment("1899-12-30", "YYYY-MM-DD");
 const present = moment().startOf('day');
@@ -112,6 +112,11 @@ const populateColumn = (tasks, field, valueType, isHorizontalAligned) => {
 }
 
 const prepareTemplate = (sheetId, tasks) => {
+    let time;
+    if (REALTIME) time = moment().format("h:mm A");
+    else time = tasks.shiftStart;
+    updateshiftStart(time);
+
     return [
         {
             updateDimensionProperties: {
@@ -260,7 +265,7 @@ const prepareTemplate = (sheetId, tasks) => {
                     {
                         values: {
                             userEnteredValue: {
-                                numberValue: timeToFraction(tasks.shiftStart)
+                                numberValue: timeToFraction(time)
                             },
                             userEnteredFormat: {
                                 numberFormat: {
