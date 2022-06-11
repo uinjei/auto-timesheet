@@ -31,8 +31,6 @@ export const adjust = async (isEndShift) => {
     } else {
         adjusted = today.add('9', 'hours');
     }
-    console.log('today ', today);
-    console.log('adjusted.format("YYYY-MM-DDTHH:mm:ss") ', adjusted.format("YYYY-MM-DDTHH:mm:ss"));
     return adjusted.format("YYYY-MM-DDTHH:mm:ss");
 }
 

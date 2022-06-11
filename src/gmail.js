@@ -33,7 +33,7 @@ const getMessageBody = async (link, isReply) => {
   return emailTemplate.replace("${link}", link);
 }
 
-const sendEmail = async (gmail, link, isReply) => {
+const sendEmail = async (auth, gmail, link, isReply) => {
   console.log("Auto send email is set to true.");
   const status =  new Spinner("Sending mail...", ANIMATION);
   status.start();
@@ -43,7 +43,7 @@ const sendEmail = async (gmail, link, isReply) => {
   if (isReply) _id = { threadId: replyId};
 
   const rawMessage = await compose(link, isReply);
-  const { data: { id } = {} } = await gmail.users.messages.send({
+  const response = await gmail.users.messages.send({
     userId: 'me',
     resource: {
       ..._id,
@@ -52,10 +52,10 @@ const sendEmail = async (gmail, link, isReply) => {
   });
   
   if (!isReply) {
-    await updateSession("replyId", id);
+    await updateSession("replyId", response.data.id);
   }
   status.stop();
-  console.log("  ✔ Sending mail: OK. message id: ", id);
+  console.log("  ✔ Sending mail: OK: ", response.statusText);
   if (SET_REMINDER) createReminder(auth, isReply);
 }
 
@@ -69,7 +69,7 @@ const createDraft = async (auth, gmail, link, isReply) => {
   if (isReply) _id = {threadId: replyId};
 
   const rawMessage = await compose(link, isReply);
-  const { data: { message: {id} = {} } = {} } = await gmail.users.drafts.create({
+  const response = await gmail.users.drafts.create({
     userId: 'me',
     requestBody: {
       ..._id,
@@ -79,10 +79,10 @@ const createDraft = async (auth, gmail, link, isReply) => {
     }
   });
   if (!isReply) {
-    await updateSession("replyId", id);
+    await updateSession("replyId", response.data.message.id);
   }
   status.stop();
-  console.log("  ✔ Creating draft message: OK. message id: ", id);
+  console.log("  ✔ Creating draft message: ", response.statusText);
   if (SET_REMINDER) createReminder(auth, isReply);
 }
 
@@ -113,6 +113,6 @@ const compose = async (link, isReply) => {
 
 export default (auth, link, isReply) => {
   const gmail = getGmailService(auth);
-  if (SEND_EMAIL) return sendEmail(gmail, link, isReply);
+  if (SEND_EMAIL) return sendEmail(auth, gmail, link, isReply);
   else return createDraft(auth, gmail, link, isReply);
 };

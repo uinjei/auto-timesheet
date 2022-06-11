@@ -1,6 +1,6 @@
 {
   "name": "auto-timesheet",
-  "version": "0.1.0",
+  "version": "1.0",
   "description": "Create and send automated timesheet",
   "main": "main.js",
   "author": "Edwin Jay Javier",
